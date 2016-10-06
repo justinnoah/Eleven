@@ -4,3 +4,11 @@ version = "0.1.0"
 authors = ["Justin Noah <justinnoah@gmail.com>"]
 
 [dependencies]
+docopt = "0.6.86"
+hyper = "0.9.10"
+hyper-router = "0.1.2"
+openssl = "0.8.3"
+openssl-verify = "0.2.0"
+rust-ini = "0.9.9"
+serde = "0.8.11"
+serde_json = "0.8.2"
