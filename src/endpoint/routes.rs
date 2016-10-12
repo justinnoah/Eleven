@@ -1,12 +1,10 @@
 use std::collections::HashMap;
 
-use ijr::{JsonResponse};
 use iron::prelude::*;
-use iron::{Handler};
+use iron::Handler;
 use iron::status;
+
 use rustc_serialize::json;
-
-
 
 // Routing setup //
 
@@ -28,7 +26,7 @@ impl Router {
         for key in self.routes.keys() {
             keys.push(key);
         }
-        println!("{:?}", keys);
+        debug!("{:?}", keys);
     }
 }
 
@@ -37,7 +35,7 @@ impl Handler for Router {
         match self.routes.get(&req.url.path().join("/")) {
             Some(handler) => handler.handle(req),
             None => {
-                println!("req.url: {:?}", req.url);
+                debug!("req.url: {:?}", req.url);
                 Ok(Response::with(status::NotFound))
             }
         }
@@ -60,6 +58,15 @@ pub fn load_routes() -> Router {
         resp.set_mut(json::encode(&version_hash).unwrap()).set_mut(status::Ok);
         Ok(resp)
     });
+
+    // Ugly code, preping for the eventual support of multiple API versions
+    use endpoint::client::load_client_routes;
+
+    let client_routes: HashMap<String, Box<Handler>> = load_client_routes();
+    for (r, f) in client_routes {
+        let loc = format!("{}/{}", MATRIX_CLIENT, r);
+        router.add_route(loc, f);
+    }
 
     router
 }

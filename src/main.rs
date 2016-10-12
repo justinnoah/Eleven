@@ -1,19 +1,20 @@
 extern crate docopt;
+extern crate env_logger;
 extern crate ini;
 extern crate iron;
 extern crate iron_json_response as ijr;
+#[macro_use]
 extern crate log;
 #[macro_use]
-extern crate maplit;
 extern crate rustc_serialize;
 
 mod config;
-mod endpont;
+mod endpoint;
 
 use docopt::Docopt;
 
 use config::load_config;
-use endpont::http;
+use endpoint::http;
 
 
 const USAGE: &'static str =  "
@@ -29,6 +30,9 @@ struct Args {
 }
 
 fn main() {
+    env_logger::init().unwrap();
+    debug!("Logger booting up!");
+
     let args: Args = Docopt::new(USAGE)
         .and_then(|d| d.decode())
         .unwrap_or_else(|e| e.exit());

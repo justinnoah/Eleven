@@ -1,10 +1,9 @@
 use std::net::SocketAddr;
-use std::thread;
 
 use ijr::{JsonResponseMiddleware};
 use iron::prelude::*;
 
-use endpont::routes::load_routes;
+use endpoint::routes::load_routes;
 
 
 pub fn start_server(addr: SocketAddr) {
@@ -14,6 +13,6 @@ pub fn start_server(addr: SocketAddr) {
     let mut chain = Chain::new(router);
     chain.link_after(JsonResponseMiddleware);
 
-    println!("Begin running at: {:?}", addr);
     Iron::new(chain).http(addr).unwrap();
+    info!("rustrix is now running at: {:?}", addr);
 }
