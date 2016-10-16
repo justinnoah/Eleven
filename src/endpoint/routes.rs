@@ -31,13 +31,13 @@ impl Router {
         for key in self.routes.keys() {
             keys.push(key);
         }
-        debug!(self.log, format!("{:?}", keys).to_string());
+        slog_debug!(self.log, format!("{:?}", keys).to_string());
     }
 }
 
 impl Handler for Router {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
-        info!(self.log, format!("req.url: {:?}", req.url).to_string());
+        slog_info!(self.log, format!("req.url: {:?}", req.url).to_string());
         match self.routes.get(&req.url.path().join("/")) {
             Some(handler) => handler.handle(req),
             None => {
@@ -71,7 +71,7 @@ pub fn load_routes(server_log: &slog::Logger) -> Router {
     let client_routes: HashMap<String, Box<Handler>> = load_client_routes();
     for (r, f) in client_routes {
         let loc = format!("{}/{}", MATRIX_CLIENT, r);
-        info!(route_builder_log, loc.to_string());
+        slog_info!(route_builder_log, loc.to_string());
         router.add_route(loc, f);
     }
 

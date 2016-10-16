@@ -1,22 +1,24 @@
-use std::net::SocketAddr;
-use std::str::FromStr;
+/// cfg.ini Layout
+///
+/// [http]
+/// address = "0.0.0.0:8448"
+/// key_path = "tls/"
+
+use std::collections::{HashMap};
 
 use ini::Ini;
 
-
 pub struct Config {
-    pub address: SocketAddr,
+    pub http: Box<HashMap<String, String>>,
 }
 
 impl Config {
     pub fn load_from_ini(cfg: Ini) -> Config {
-        let http_addr = SocketAddr::from_str(
-            cfg.get_from_or(Some("http"), "address", "0.0.0.0:8448")
-        ).unwrap();
-
+        let http = cfg.section(Some("http")).unwrap().clone();
         Config {
-            address: http_addr,
+            http: Box::new(http),
         }
+
     }
 }
 
