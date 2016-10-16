@@ -37,8 +37,7 @@ pub fn login(req: &mut Request) -> IronResult<Response> {
 // Setup the client routes
 pub fn load_client_routes() -> HashMap<String, Box<Handler>> {
     let mut routes: HashMap<String, Box<Handler>> = HashMap::new();
-    let l = Box::new(login);
-    routes.insert("r0/login".to_string(), l);
+    routes.insert("r0/login".to_string(), Box::new(login));
 
     routes
 }

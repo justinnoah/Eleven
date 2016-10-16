@@ -3,18 +3,23 @@ use std::collections::HashMap;
 use iron::prelude::*;
 use iron::Handler;
 use iron::status;
+use slog;
 
 use rustc_serialize::json;
 
 // Routing setup //
-
 pub struct Router {
-    routes: HashMap<String, Box<Handler>>
+    routes: HashMap<String, Box<Handler>>,
+    log: slog::Logger,
 }
 
 impl Router {
-    pub fn new() -> Self {
-        Router { routes: HashMap::new() }
+    pub fn new(log: &slog::Logger) -> Self {
+        let l = log.new(o!());
+        Router {
+            routes: HashMap::new(),
+            log: l,
+        }
     }
 
     pub fn add_route<H>(&mut self, path: String, handler: H) where H: Handler {
@@ -26,16 +31,16 @@ impl Router {
         for key in self.routes.keys() {
             keys.push(key);
         }
-        debug!("{:?}", keys);
+        debug!(self.log, format!("{:?}", keys).to_string());
     }
 }
 
 impl Handler for Router {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
+        info!(self.log, format!("req.url: {:?}", req.url).to_string());
         match self.routes.get(&req.url.path().join("/")) {
             Some(handler) => handler.handle(req),
             None => {
-                debug!("req.url: {:?}", req.url);
                 Ok(Response::with(status::NotFound))
             }
         }
@@ -43,12 +48,13 @@ impl Handler for Router {
 }
 
 // Routes //
-pub fn load_routes() -> Router {
+pub fn load_routes(server_log: &slog::Logger) -> Router {
     const API_VERSION: &'static str = "r0.2.0";
     const MATRIX_CLIENT: &'static str = "_matrix/client";
 
-    let mut router = Router::new();
-    
+    let route_builder_log = server_log.new(o!());
+    let mut router = Router::new(&server_log);
+
     router.add_route(format!("{}/versions", MATRIX_CLIENT), |_: &mut Request| {
         let versions = vec![API_VERSION.to_string()];
         let mut version_hash: HashMap<&str, Vec<String>> = HashMap::new();
@@ -65,9 +71,9 @@ pub fn load_routes() -> Router {
     let client_routes: HashMap<String, Box<Handler>> = load_client_routes();
     for (r, f) in client_routes {
         let loc = format!("{}/{}", MATRIX_CLIENT, r);
+        info!(route_builder_log, loc.to_string());
         router.add_route(loc, f);
     }
 
     router
 }
-

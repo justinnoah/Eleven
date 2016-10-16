@@ -11,7 +11,7 @@ pub struct Config {
 impl Config {
     pub fn load_from_ini(cfg: Ini) -> Config {
         let http_addr = SocketAddr::from_str(
-            cfg.get_from_or(Some("http"), "address", "127.0.0.1:8448")
+            cfg.get_from_or(Some("http"), "address", "0.0.0.0:8448")
         ).unwrap();
 
         Config {

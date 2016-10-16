@@ -5,11 +5,11 @@ authors = ["Justin Noah <justinnoah@gmail.com>"]
 
 [dependencies]
 docopt = "0.6"
-env_logger = "0.3"
 iron = "0.4"
 iron-json-response = { git = "https://github.com/justinnoah/iron-json-response", branch="iron_0.4.0_update" }
-log = "0.3"
 maplit = "0.1"
 openssl = "0.8"
 rust-ini = "0.9"
 rustc-serialize = "0.3"
+slog = "1.0.1"
+slog-term = "1.1.0"
