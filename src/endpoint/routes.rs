@@ -2,10 +2,11 @@ use std::collections::HashMap;
 
 use iron::prelude::*;
 use iron::Handler;
+use iron::request::{Body};
 use iron::status;
+use rustc_serialize::json;
 use slog;
 
-use rustc_serialize::json;
 
 // Routing setup //
 pub struct Router {
@@ -37,7 +38,11 @@ impl Router {
 
 impl Handler for Router {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
-        slog_info!(self.log, format!("req.url: {:?}", req.url).to_string());
+        slog_debug!(self.log, format!("req.url: {:?}", req.url).to_string());
+        slog_debug!(self.log, format!("req.method: {:?}", req.method).to_string());
+        let body = String::new();
+        req.body.read_to_string(&body);
+        slog_debug!(self.log, format!("Data Dump: {:?}", body).to_string());
         match self.routes.get(&req.url.path().join("/")) {
             Some(handler) => handler.handle(req),
             None => {

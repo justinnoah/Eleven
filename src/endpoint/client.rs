@@ -11,25 +11,24 @@ use endpoint::client_types::{ApiError, ApiErrorResponse};
 // Routes needed for r0.2.0
 //
 // error response
-fn api_error(errorcode: ApiError, error: &str) -> IronResult<Response> {
+fn api_error(errorcode: ApiError, error: &str, code: status::Status) -> IronResult<Response> {
     let e_resp = ApiErrorResponse {
         errorcode: errorcode,
         error: error.to_string(),
     };
 
-    Ok(Response::with((status::Ok, json::encode(&e_resp).unwrap())))
+    Ok(Response::with((code, json::encode(&e_resp).unwrap())))
 }
 
 // Login API
-
 // URL: _matrix/client/r0/lugin
 pub fn login(req: &mut Request) -> IronResult<Response> {
     match req.method {
         Method::Post => {
-            api_error(ApiError::M_FORBIDDEN, "Not Yet Implemented")
+            api_error(ApiError::M_NOT_IMPLEMENTED, "Not Yet Implemented", status::BadRequest)
         },
         _ => {
-            api_error(ApiError::M_FORBIDDEN, "One must POST to login")
+            api_error(ApiError::M_FORBIDDEN, "One must POST to login", status::Forbidden)
         },
     }
 }

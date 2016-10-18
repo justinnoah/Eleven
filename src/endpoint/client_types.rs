@@ -8,12 +8,14 @@ pub enum ApiError {
     // M_NOT_FOUND,
     // M_LIMIT_EXCEEDED,
     // M_USER_IN_USE,
-    // M_INVALID_USERNAME,
+    M_INVALID_USERNAME,
     // M_ROOM_IN_USE,
     // M_BAD_PAGINATION,
     // M_THREEPID_IN_USE,
     // M_THREEPID_NOT_FOUND,
     // M_THREEPID_NOT_TRUSTED,
+    // Unofficial?
+    M_NOT_IMPLEMENTED,
 }
 
 #[derive(Debug, RustcEncodable)]
