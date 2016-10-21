@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::io::Read;
 
 use iron::prelude::*;
 use iron::Handler;
@@ -38,11 +39,11 @@ impl Router {
 
 impl Handler for Router {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
-        slog_debug!(self.log, format!("req.url: {:?}", req.url).to_string());
-        slog_debug!(self.log, format!("req.method: {:?}", req.method).to_string());
-        let body = String::new();
-        req.body.read_to_string(&body);
-        slog_debug!(self.log, format!("Data Dump: {:?}", body).to_string());
+        info!("req.url: {:?}", req.url);
+        debug!("req.method: {:?}", req.method);
+        let mut body = String::new();
+        let _ = req.body.read_to_string(&mut body);
+        debug!("Data Dump: {:?}", body);
         match self.routes.get(&req.url.path().join("/")) {
             Some(handler) => handler.handle(req),
             None => {

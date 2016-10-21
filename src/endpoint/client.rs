@@ -16,6 +16,7 @@ fn api_error(errorcode: ApiError, error: &str, code: status::Status) -> IronResu
         errorcode: errorcode,
         error: error.to_string(),
     };
+    debug!("Error: {:?}", json::encode(&e_resp));
 
     Ok(Response::with((code, json::encode(&e_resp).unwrap())))
 }
@@ -23,6 +24,7 @@ fn api_error(errorcode: ApiError, error: &str, code: status::Status) -> IronResu
 // Login API
 // URL: _matrix/client/r0/lugin
 pub fn login(req: &mut Request) -> IronResult<Response> {
+    debug!("User Logging In!");
     match req.method {
         Method::Post => {
             api_error(ApiError::M_NOT_IMPLEMENTED, "Not Yet Implemented", status::BadRequest)

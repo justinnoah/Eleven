@@ -1,6 +1,6 @@
 [package]
 name = "rustrix"
-version = "0.1.0"
+version = "0.0.1"
 authors = ["Justin Noah <justinnoah@gmail.com>"]
 
 [dependencies]
@@ -9,13 +9,13 @@ iron-json-response = { git = "https://github.com/justinnoah/iron-json-response",
 log = "*"
 rust-ini = "0.9"
 rustc-serialize = "0.3"
-slog = "1.0.1"
+slog = "1.0"
 slog-envlogger = "*"
 slog-stdlog = "*"
-slog-term = "1.1.0"
+slog-term = "1.1"
 
 [dependencies.hyper]
-version = "0.9.10"
+version = "0.9"
 default-features = false
 features = ["openssl"]
 

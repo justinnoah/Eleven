@@ -1,3 +1,4 @@
+#[warn(non_camel_case_types)]
 #[derive(Debug, RustcEncodable)]
 pub enum ApiError {
     M_FORBIDDEN,
