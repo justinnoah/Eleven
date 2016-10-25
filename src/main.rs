@@ -1,24 +1,28 @@
+#![cfg_attr(feature = "serde_derive", feature(proc_macro))]
+
+#[cfg(feature = "serde_derive")]
+#[macro_use]
+extern crate serde_derive;
+
 extern crate docopt;
 extern crate ini;
 extern crate iron;
 extern crate iron_json_response as ijr;
 #[macro_use]
+extern crate log;
 extern crate rustc_serialize;
+extern crate serde_json;
 #[macro_use]
 extern crate slog;
 extern crate slog_envlogger;
 extern crate slog_stdlog;
 extern crate slog_term;
 
-#[macro_use]
-extern crate log;
-
-mod config;
-mod endpoint;
-
 use docopt::Docopt;
 use slog::DrainExt;
 
+mod config;
+mod endpoint;
 use config::load_config;
 use endpoint::http;
 

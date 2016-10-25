@@ -3,9 +3,8 @@ use std::io::Read;
 
 use iron::prelude::*;
 use iron::Handler;
-use iron::request::{Body};
 use iron::status;
-use rustc_serialize::json;
+use serde_json as json;
 use slog;
 
 
@@ -43,7 +42,7 @@ impl Handler for Router {
         debug!("req.method: {:?}", req.method);
         let mut body = String::new();
         let _ = req.body.read_to_string(&mut body);
-        debug!("Data Dump: {:?}", body);
+        // debug!("Data Dump: {:?}", body);
         match self.routes.get(&req.url.path().join("/")) {
             Some(handler) => handler.handle(req),
             None => {
@@ -67,7 +66,7 @@ pub fn load_routes(server_log: &slog::Logger) -> Router {
         version_hash.insert("versions", versions);
 
         let mut resp = Response::new();
-        resp.set_mut(json::encode(&version_hash).unwrap()).set_mut(status::Ok);
+        resp.set_mut(json::to_string(&version_hash).unwrap()).set_mut(status::Ok);
         Ok(resp)
     });
 
