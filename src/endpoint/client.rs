@@ -5,7 +5,6 @@ use iron::Handler;
 use iron::status;
 use iron::method::Method;
 use serde_json as json;
-use slog_envlogger;
 
 // use endpoint::client_types::{ApiError, ApiErrorResponse};
 #[cfg(feature = "serde_derive")]
@@ -22,7 +21,7 @@ fn api_error(errorcode: ApiError, error: &str, code: status::Status) -> IronResu
         errorcode: errorcode,
         error: error.to_string(),
     };
-    debug!("Error: {:?}", json::to_string(&e_resp).unwrap().to_string());
+    debug!("Error: {:?}", json::to_string(&e_resp).unwrap());
 
     Ok(Response::with((code, json::to_string(&e_resp).unwrap())))
 }
@@ -52,14 +51,6 @@ pub fn login(req: &mut Request) -> IronResult<Response> {
         },
     }
 }
-
-// URL: _matrix/client/r0/register
-//pub fn register(req: &mut Request) -> IronResult<Response> {
-//    debug!("Attempting to register an User");
-//    match req.method {
-//
-//    }
-//}
 
 // Setup the client routes
 pub fn load_client_routes() -> HashMap<String, Box<Handler>> {

@@ -5,21 +5,19 @@ use iron::prelude::*;
 use iron::Handler;
 use iron::status;
 use serde_json as json;
-use slog;
 
+
+type Routes = HashMap<String, Box<Handler>>;
 
 // Routing setup //
 pub struct Router {
-    routes: HashMap<String, Box<Handler>>,
-    log: slog::Logger,
+    routes: Routes,
 }
 
 impl Router {
-    pub fn new(log: &slog::Logger) -> Self {
-        let l = log.new(o!());
+    pub fn new() -> Self {
         Router {
             routes: HashMap::new(),
-            log: l,
         }
     }
 
@@ -32,7 +30,7 @@ impl Router {
         for key in self.routes.keys() {
             keys.push(key);
         }
-        slog_debug!(self.log, format!("{:?}", keys).to_string());
+        debug!("{:?}", keys);
     }
 }
 
@@ -53,12 +51,11 @@ impl Handler for Router {
 }
 
 // Routes //
-pub fn load_routes(server_log: &slog::Logger) -> Router {
+pub fn load_routes() -> Router {
     const API_VERSION: &'static str = "r0.2.0";
     const MATRIX_CLIENT: &'static str = "_matrix/client";
 
-    let route_builder_log = server_log.new(o!());
-    let mut router = Router::new(&server_log);
+    let mut router = Router::new();
 
     router.add_route(format!("{}/versions", MATRIX_CLIENT), |_: &mut Request| {
         let versions = vec![API_VERSION.to_string()];
@@ -76,7 +73,7 @@ pub fn load_routes(server_log: &slog::Logger) -> Router {
     let client_routes: HashMap<String, Box<Handler>> = load_client_routes();
     for (r, f) in client_routes {
         let loc = format!("{}/{}", MATRIX_CLIENT, r);
-        slog_info!(route_builder_log, loc.to_string());
+        info!("{}", loc);
         router.add_route(loc, f);
     }
 

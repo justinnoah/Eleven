@@ -5,12 +5,11 @@ use std::str::FromStr;
 
 use ijr::{JsonResponseMiddleware};
 use iron::prelude::*;
-use slog;
 
 use endpoint::routes::load_routes;
 
 
-pub fn start_server(cfg: Box<HashMap<String, String>>, root_log: slog::Logger) {
+pub fn start_server(cfg: Box<HashMap<String, String>>) {
     // Config options needed for this  function
     let tls_path = Path::new(cfg.get("key_path").unwrap());
     let crt_path = tls_path.join("domain.crt");
@@ -22,12 +21,9 @@ pub fn start_server(cfg: Box<HashMap<String, String>>, root_log: slog::Logger) {
         panic!("TLS Key Path not found");
     }
 
-    // Server Log
-    let server_log = root_log.new(o!("address" => addr.to_string()));
-
     // Load the routes needed by the server
-    slog_info!(server_log, "Loading All Routes");
-    let router = load_routes(&server_log);
+    info!("Loading All Routes");
+    let router = load_routes();
     router.list_routes();
 
     // Chain our routes and MiddleWarez
@@ -38,7 +34,7 @@ pub fn start_server(cfg: Box<HashMap<String, String>>, root_log: slog::Logger) {
         Iron::new(chain).https(
             SocketAddr::from_str(addr).unwrap(), crt_path, key_path).unwrap();
 
-        slog_info!(server_log, "rustrix is now running at: {:?}", addr);
+        info!("rustrix is now running at: {:?}", addr);
     } else {
         panic!("Missing either 'domain.crt' or 'domain.key'");
     }

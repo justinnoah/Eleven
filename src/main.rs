@@ -12,14 +12,11 @@ extern crate iron_json_response as ijr;
 extern crate log;
 extern crate rustc_serialize;
 extern crate serde_json;
-#[macro_use]
+#[macro_use(o)]
 extern crate slog;
-extern crate slog_envlogger;
 extern crate slog_stdlog;
-extern crate slog_term;
 
 use docopt::Docopt;
-use slog::DrainExt;
 
 mod config;
 mod endpoint;
@@ -44,13 +41,11 @@ fn main() {
         .and_then(|d| d.decode())
         .unwrap_or_else(|e| e.exit());
 
-    let term = slog_term::streamer().build();
-    let drain = slog_envlogger::new(term);
-    let root_log = slog::Logger::root(drain.fuse(), o!("version" => "0.0.1"));
+    let root_log = slog::Logger::root(slog::Discard, o!("version" => "0.1.0"));
     slog_stdlog::set_logger(root_log.clone()).unwrap();
 
-    slog_info!(root_log, "Loading Config");
+    info!("Loading Config");
     let cfg = load_config(args.flag_config.clone());
 
-    http::start_server(cfg.http, root_log);
+    http::start_server(cfg.http);
 }
