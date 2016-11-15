@@ -1,4 +1,3 @@
-#[cfg(feature = "serde_codegen")]
 fn main() {
     extern crate serde_codegen;
 
@@ -7,13 +6,8 @@ fn main() {
 
     let out_dir = env::var_os("OUT_DIR").unwrap();
 
-    let src = Path::new("src/endpoint/client_types.in.rs");
-    let dst = Path::new(&out_dir).join("client_types.rs");
+    let src = Path::new("src/data_types.in.rs");
+    let dst = Path::new(&out_dir).join("data_types.rs");
 
     serde_codegen::expand(&src, &dst).unwrap();
-}
-
-#[cfg(not(feature = "serde_codegen"))]
-fn main() {
-    // do nothing
 }

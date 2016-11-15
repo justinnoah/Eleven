@@ -6,5 +6,5 @@ rust:
 matrix:
   allow_failures:
     - rust:
-        - beta
-        - nightly
+        beta
+        nightly
