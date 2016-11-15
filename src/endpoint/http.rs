@@ -34,7 +34,7 @@ pub fn start_server(cfg: Box<HashMap<String, String>>) {
         Iron::new(chain).https(
             SocketAddr::from_str(addr).unwrap(), crt_path, key_path).unwrap();
 
-        info!("rustrix is now running at: {:?}", addr);
+        info!("eleven is now running at: {:?}", addr);
     } else {
         panic!("Missing either 'domain.crt' or 'domain.key'");
     }

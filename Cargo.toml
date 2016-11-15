@@ -1,5 +1,5 @@
 [package]
-name = "rustrix"
+name = "eleven"
 version = "0.1.0"
 authors = ["Justin Noah <justinnoah@gmail.com>"]
 build = "build.rs"
@@ -11,8 +11,8 @@ serde_codegen = {version = "0.8", optional = true}
 docopt = "0.6"
 iron-json-response = { git = "https://github.com/justinnoah/iron-json-response", branch="iron_0.4.0_update" }
 log = "*"
-rust-ini = "0.9"
 rustc-serialize = "0.3"
+rust-ini = "0.9"
 serde = "0.8"
 serde_json = "0.8"
 serde_derive = {version = "0.8", optional = true}

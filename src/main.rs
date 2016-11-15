@@ -25,7 +25,7 @@ use endpoint::http;
 
 
 const USAGE: &'static str =  "
-Usage: rustrix [-c <config>]
+Usage: eleven [-c <config>]
 
 Options:
     -c, --config CONFIG  Path to configuration file
