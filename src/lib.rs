@@ -10,19 +10,24 @@ extern crate serde_json;
 #[macro_use(o)]
 extern crate slog;
 extern crate slog_stdlog;
+extern crate slog_term;
+extern crate typemap;
 extern crate valico;
+
+use slog::DrainExt;
 
 pub mod actions;
 pub mod config;
+pub mod errors;
 pub mod rest;
 use config::Config;
 use rest::server;
 
 
 pub fn rest_up(cfg: Config) {
-    let root_log = slog::Logger::root(slog::Discard, o!("version" => "0.1.0"));
+    let root_log = slog::Logger::root(slog_term::streamer().stderr().build().fuse(), o!());
     slog_stdlog::set_logger(root_log.clone()).unwrap();
 
     info!("Loading REST Interface");
-    server::start_server(cfg.http);
+    server::start_server(cfg.http, cfg.matrix.get("namespace").unwrap());
 }
