@@ -1,5 +1,6 @@
 [matrix]
 namespace = com.example
+db_uri = sqlite://:memory:
 
 [http]
 address = 127.0.0.1:8448

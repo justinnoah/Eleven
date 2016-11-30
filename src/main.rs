@@ -4,7 +4,7 @@ extern crate rustc_serialize;
 
 use docopt::Docopt;
 use libeleven::config::load_config;
-use libeleven::rest_up;
+use libeleven::entry;
 
 
 const USAGE: &'static str =  "
@@ -25,5 +25,5 @@ fn main() {
         .unwrap_or_else(|e| e.exit());
 
     let cfg = load_config(args.flag_config.clone());
-    rest_up(cfg);
+    entry(cfg);
 }
