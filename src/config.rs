@@ -7,6 +7,7 @@
 ///
 /// [matrix]
 /// namespace = com.example
+/// db_uri = sqlite://:memory:
 /// ------------------------
 ///
 /// namespace must be a domain you own, preferably with TLS keys
@@ -39,9 +40,11 @@ impl Config {
                 // Default http section
                 let mut matrix_ = HashMap::<String, String>::new();
                 matrix_.insert("namespace".to_string(), "com.example".to_string());
+                matrix_.insert("db_uri".to_string(), "sqlite://:memory:".to_string());
                 matrix_
             }
         };
+
         Config {
             http: Box::new(http),
             matrix: Box::new(matrix),
