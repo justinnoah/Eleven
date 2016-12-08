@@ -5,8 +5,9 @@ use std::str::FromStr;
 
 use iron::prelude::*;
 use jsonway;
+use rusqlite::Connection;
 use rustless::{Application, Api, Nesting};
-use super::MatrixNamespace;
+use super::{DB, MatrixNamespace};
 
 
 pub fn api_builder() -> Api {
@@ -28,10 +29,12 @@ pub fn api_builder() -> Api {
     api
 }
 
-pub fn start_server(cfg: Box<HashMap<String, String>>, namespace: &String) {
+pub fn start_server(cfg: Box<HashMap<String, String>>, namespace: &String, db_con: Connection) {
     let mut app = Application::new(api_builder());
 
+    // Additional extensions to the app
     app.ext.insert::<MatrixNamespace>(namespace.clone());
+    app.ext.insert::<DB>(db_con);
 
     let addr = match cfg.get("address") {
         Some(x) => x,

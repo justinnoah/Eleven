@@ -6,8 +6,8 @@
 /// key_path = "tls/"
 ///
 /// [matrix]
+/// db_uri = sqlite://
 /// namespace = com.example
-/// db_uri = sqlite://:memory:
 /// ------------------------
 ///
 /// namespace must be a domain you own, preferably with TLS keys
@@ -15,6 +15,7 @@
 use std::collections::{HashMap};
 
 use ini::Ini;
+
 
 pub struct Config {
     pub http: Box<HashMap<String, String>>,
@@ -40,7 +41,7 @@ impl Config {
                 // Default http section
                 let mut matrix_ = HashMap::<String, String>::new();
                 matrix_.insert("namespace".to_string(), "com.example".to_string());
-                matrix_.insert("db_uri".to_string(), "sqlite://:memory:".to_string());
+                matrix_.insert("db_uri".to_string(), "sqlite://".to_string());
                 matrix_
             }
         };

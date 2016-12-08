@@ -1,4 +1,5 @@
 [matrix]
+db_uri = sqlite://
 namespace = com.example
 db_uri = sqlite://:memory:
 
